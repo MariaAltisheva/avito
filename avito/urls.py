@@ -15,18 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls.static import static
-from django.urls import path
-from ads.views import *
+from django.urls import path, include
+from ads.views.ad import *
+from ads.views.category import *
 from avito import settings
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('', root),
+    path('admin/', admin.site.urls),
+    path('cat/', include('ads.urls.category')),
+    path('ad/', include('ads.urls.ad'))
 
-    path('cat/', CategoryListCreateView.as_view()),
-    path('ad/', AdListCreateView.as_view()),
-    path('cat/<int:pk>', CategoryDetailView.as_view()),
-    path('ad/<int:pk>', AdDetailView.as_view()),
 ]
 
 if settings.DEBUG:
