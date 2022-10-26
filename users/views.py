@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DetailView, UpdateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 
 from avito.settings import TOTAL_ON_PAGE
 from users.models import User, Location
@@ -80,5 +80,43 @@ class UserUpdateView(UpdateView):
                              'role': self.object.role,
                              'age': self.object.age,
                              'location': list(map(str, self.object.location.all())),
-                             'total_ads': self.object.ads.filter(is_published=True).count()
                              }, safe=False)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UserCreateView(CreateView):
+    model = User
+    fields = ['username']
+
+    def post(self, request, *args, **kwargs):
+        data = json.loads(request.body)
+        user = User.objects.create(
+            username=data['username'],
+            first_name=data['first_name'],
+            last_name=data['last_name'],
+            age=data['age'],
+            role=data['role'],
+        )
+        if 'locations' in data:
+            for loc_name in data['locations']:
+                loc, _ = Location.objects.get_or_create(name=loc_name)
+                user.location.add(loc)
+
+        return JsonResponse({'id': user.pk,
+                             'username': user.username,
+                             'first_name': user.first_name,
+                             'last_name': user.first_name,
+                             'role': user.role,
+                             'age': user.age,
+                             'location': list(map(str, user.location.all())),
+                             }, safe=False)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UserDeleteView(DeleteView):
+    model = User
+    success_url = "/"
+
+    def delete(self, request, *args, **kwargs):
+        super().delete(request, *args, **kwargs)
+        return JsonResponse({'status': 'ok'}, status=204)
