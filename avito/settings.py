@@ -130,3 +130,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_files')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#
+TOTAL_ON_PAGE = 5
