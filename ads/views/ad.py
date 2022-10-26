@@ -65,7 +65,8 @@ class AdDetailView(DetailView):
                              'category': ad.category.name,
                              'price': ad.price,
                              'description': ad.description,
-                             'is_published': ad.is_published
+                             'is_published': ad.is_published,
+                             'image': ad.image.url if ad.image else None
                              }, safe=False)
 
 
@@ -94,7 +95,7 @@ class AdUpdateView(UpdateView):
                              'price': self.object.price,
                              'description': self.object.description,
                              'address': self.object.address,
-                             'is_published': self.object.is_published
+                             'is_published': self.object.is_published,
                              }, safe=False)
 
 
@@ -106,3 +107,23 @@ class AdDeleteView(DeleteView):
     def delete(self, request, *args, **kwargs):
         super().delete(request, *args, **kwargs)
         return JsonResponse({'status': 'ok'}, status=204)
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AdUploadImage(UpdateView):
+    model = Ad
+    fields = ['name']
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.image = request.FILES.get('image')
+        self.object.save()
+        return JsonResponse({'id': self.object.pk,
+                             'name': self.object.name,
+                             'author': self.object.author,
+                             'price': self.object.price,
+                             'description': self.object.description,
+                             'address': self.object.address,
+                             'is_published': self.object.is_published,
+                             'image': self.object.image.url if self.object.image else None
+                             }, safe=False)
