@@ -23,8 +23,6 @@ class UserRoles:
                (MODERATOR, 'Модератор'))
 
 
-
-
 class User(models.Model):
     first_name = models.CharField(verbose_name='Имя', max_length=100, null=True)
     last_name = models.CharField(verbose_name='Фамилия', max_length=200, null=True)
