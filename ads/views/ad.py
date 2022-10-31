@@ -10,7 +10,7 @@ from django.views.generic import DetailView, CreateView, ListView, UpdateView, D
 from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
-from ads.serializers import AdSerializer
+from ads.serializers import AdSerializer, AdDetailSerializer, AdListSerializer
 from avito.settings import TOTAL_ON_PAGE
 from users.models import User
 
@@ -18,9 +18,18 @@ from users.models import User
 def root(request):
     return JsonResponse({'status': 'ok'})
 
+
 class AdViewSet(ModelViewSet):
     queryset = Ad.objects.order_by('-price')
-    serializer_class = AdSerializer
+    default_serializer = AdSerializer
+    serializer_classes = {
+        'retrieve': AdDetailSerializer,
+        'list': AdListSerializer
+    }
+
+    def get_serializer_class(self):
+        return self.serializer_classes.get(self.action, self.default_serializer)
+
     def list(self, request, *args, **kwargs):
         categories = request.GET.getlist('cat')
         if categories:
@@ -36,9 +45,9 @@ class AdViewSet(ModelViewSet):
         price_from = request.GET.get('price_from')
         price_to = request.GET.get('price_to')
         if price_to:
-            self.queryset = self.queryset.filter(price__gte=price_to)
+            self.queryset = self.queryset.filter(price__lte=price_to)
         if price_from:
-            self.queryset = self.queryset.filter(price__lte=price_from)
+            self.queryset = self.queryset.filter(price__gte=price_from)
 
         return super().list(self, request, *args, **kwargs)
 
