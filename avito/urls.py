@@ -25,6 +25,7 @@ from users.views import LocationViewSet
 
 router = routers.SimpleRouter()
 router.register('location', LocationViewSet)
+router.register('ad', AdViewSet)
 
 urlpatterns = [
     path('', root),
@@ -34,6 +35,9 @@ urlpatterns = [
     path('ad/', include('ads.urls.ad'))
 
 ]
+
+urlpatterns += router.urls
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
