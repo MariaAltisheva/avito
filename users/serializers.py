@@ -4,10 +4,10 @@ from users.models import User, Location
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    locations = serializers.SlugRelatedField(queryset=Location.objects.all(), many=True, slug_field="name")
+    location = serializers.SlugRelatedField(required=False, queryset=Location.objects.all(), many=True, slug_field="name")
 
     def is_valid(self, *, raise_exception=False):
-        self._locations = self.initial_data.pop('locations')
+        self._locations = self.initial_data.pop('locations', [])
         return super().is_valid(raise_exception=raise_exception)
 
     def create(self, validated_data):
@@ -22,3 +22,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         model = User
         fields = "__all__"
 
+
+class LocationSerializer(serializers.ModelSerializer):
+
+
+    class Meta:
+        model = Location
+        fields = "__all__"

@@ -16,9 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.urls import path, include
+from rest_framework import routers
+
 from ads.views.ad import *
 from ads.views.category import *
 from avito import settings
+from users.views import LocationViewSet
+
+router = routers.SimpleRouter()
+router.register('location', LocationViewSet)
 
 urlpatterns = [
     path('', root),
