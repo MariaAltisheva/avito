@@ -16,6 +16,6 @@ class IsOwnerAdOrStaff(BasePermission):
     message = "Вы не являетесь владельцем объявления или админом!"
 
     def has_object_permission(self, request, view, obj):
-        if request.user == obj.owner or request.user.role in [UserRoles.ADMIN, UserRoles.MODERATOR]:
+        if request.user == obj.author or request.user.role in [UserRoles.ADMIN, UserRoles.MODERATOR]:
             return True
         return False

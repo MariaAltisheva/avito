@@ -11,6 +11,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
+from ads.permissions import IsOwnerAdOrStaff
 from ads.serializers import AdSerializer, AdDetailSerializer, AdListSerializer
 from avito.settings import TOTAL_ON_PAGE
 from users.models import User
@@ -29,7 +30,10 @@ class AdViewSet(ModelViewSet):
     }
     default_permission = [AllowAny()]
     permissions = {
-        'retrieve': [IsAuthenticated],
+        'create': [IsAuthenticated()],
+        'update': [IsAuthenticated(), IsOwnerAdOrStaff()],
+        'partial_update': [IsAuthenticated(), IsOwnerAdOrStaff()],
+        'destroy': [IsAuthenticated(), IsOwnerAdOrStaff()],
     }
 
     def get_permissions(self):

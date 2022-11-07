@@ -17,6 +17,7 @@ class SelectionViewSet(ModelViewSet):
     permissions = {
         'create': [IsAuthenticated()],
         'update': [IsAuthenticated(), IsOwnerSelection()],
+        'partial_update': [IsAuthenticated(), IsOwnerSelection()],
         'destroy': [IsAuthenticated(), IsOwnerSelection()],
     }
 

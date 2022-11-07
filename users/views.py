@@ -5,6 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from rest_framework.generics import CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from avito.settings import TOTAL_ON_PAGE
@@ -12,6 +13,7 @@ from users.models import User, Location
 import json
 
 from users.serializers import *
+
 
 class UserListView(ListView):
     queryset = User.objects.all()
@@ -21,6 +23,7 @@ class UserListView(ListView):
 class UserDetailView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class UserUpdateView(UpdateAPIView):
