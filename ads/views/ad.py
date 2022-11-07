@@ -168,6 +168,8 @@ class AdViewSet(ModelViewSet):
 #         return JsonResponse({'status': 'ok'}, status=204)
 
 
+
+
 @method_decorator(csrf_exempt, name='dispatch')
 class AdUploadImage(UpdateView):
     model = Ad
