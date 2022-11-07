@@ -31,7 +31,13 @@ class SelectionListSerializer(serializers.ModelSerializer):
         model = Selection
         fields = ["id", "name"]
 
+class SelectionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Selection
+        fields = "__all__"
+
 class SelectionDetailSerializer(serializers.ModelSerializer):
+    items = AdSerializer(many=True)
     class Meta:
         model = Selection
         fields = "__all__"
