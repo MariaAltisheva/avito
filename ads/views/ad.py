@@ -7,6 +7,7 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import DetailView, CreateView, ListView, UpdateView, DeleteView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 
 from ads.models import Ad, Category
@@ -26,6 +27,14 @@ class AdViewSet(ModelViewSet):
         'retrieve': AdDetailSerializer,
         'list': AdListSerializer
     }
+    default_permission = [AllowAny()]
+    permissions = {
+        'retrieve': [IsAuthenticated],
+    }
+
+    def get_permissions(self):
+        return self.permissions.get(self.action, self.default_permission)
+
 
     def get_serializer_class(self):
         return self.serializer_classes.get(self.action, self.default_serializer)
