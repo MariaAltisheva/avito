@@ -32,19 +32,19 @@ class UserUpdateSerializer(serializers.ModelSerializer):
         self._locations = self.initial_data.pop('location', [])
         return super().is_valid(raise_exception=raise_exception)
 
-    def create(self, validated_data):
-        user = User.objects.create(**validated_data)
-        for loc_name in self._locations:
-            location, _ = Location.objects.get_or_create(name=loc_name)
-            user.location.add(location)
-        return user
-
-    # def save(self, **kwargs):
-    #     user = super().save(**kwargs)
+    # def create(self, validated_data):
+    #     user = User.objects.create(**validated_data)
     #     for loc_name in self._locations:
     #         location, _ = Location.objects.get_or_create(name=loc_name)
     #         user.location.add(location)
     #     return user
+
+    def save(self, **kwargs):
+        user = super().save(**kwargs)
+        for loc_name in self._locations:
+            location, _ = Location.objects.get_or_create(name=loc_name)
+            user.location.add(location)
+        return user
 
     class Meta:
         model = User

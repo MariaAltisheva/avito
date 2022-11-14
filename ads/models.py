@@ -1,4 +1,4 @@
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator, MaxLengthValidator
 from django.db import models
 
 from users.models import User
@@ -6,7 +6,7 @@ from users.models import User
 
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    slug = models.CharField(unique=True, max_length=10, validator=[MinLengthValidator(5)])
+    slug = models.CharField(unique=True, max_length=10, validator=[MinLengthValidator(5), MaxLengthValidator(9)])
 
     class Meta:
         verbose_name = 'Категория'

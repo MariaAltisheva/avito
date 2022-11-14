@@ -1,3 +1,7 @@
+from datetime import date
+
+from dateutil.relativedelta import relativedelta
+
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import RegexValidator
 from django.db import models
@@ -27,7 +31,7 @@ class UserRoles:
                (MODERATOR, 'Модератор'))
 
 class User(AbstractUser):
-    age = models.PositiveSmallIntegerField(blank=True, null=True)
+    age = models.PositiveSmallIntegerField(blank=True, null=True, editable=False)
     location = models.ManyToManyField(Location)
     role = models.CharField(choices=UserRoles.choices, default=UserRoles.MEMBER, max_length=10)
     birth_date = models.DateTimeField(validators=[check_birth_date])
@@ -38,6 +42,7 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         self.set_password(self.password)
+        self.age = relativedelta(date.today(), self.birth_date).year
         super().save(*args, **kwargs)
 
     class Meta:
