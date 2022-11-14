@@ -22,6 +22,7 @@ def test_ad_create(client, user, category, access_token):
         "author": 2,
         "category": 2
     }
-    response = client.post('/ad/', data, content_type="application/json")
+    response = client.post('/ad/', data, content_type="application/json",
+                           HTTP_AUTHORIZATION="Bearer " + access_token)
     assert response.status_code == 201
     assert response.data == expected_data
