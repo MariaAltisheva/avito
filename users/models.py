@@ -24,9 +24,14 @@ class UserRoles:
                (MODERATOR, 'Модератор'))
 
 class User(AbstractUser):
-    age = models.PositiveSmallIntegerField()
+    age = models.PositiveSmallIntegerField(blank=True, null=True)
     location = models.ManyToManyField(Location)
     role = models.CharField(choices=UserRoles.choices, default=UserRoles.MEMBER, max_length=10)
+    birth_date = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        self.set_password(self.password)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Пользователь'
