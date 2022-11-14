@@ -9,5 +9,4 @@ def access_token(client, django_user_model):
     birth_date = date.today() - timedelta(days=5000)
     django_user_model.objects.create_user(username=username, password=password, birth_date=birth_date, role='admin')
     response = client.post("/user/token/", {"username": username, "password": password}, content_type="application/json")
-    print(response.data)
     return response.data['access']

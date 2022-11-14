@@ -19,8 +19,8 @@ def test_ad_create(client, user, category, access_token):
         "price": 432,
         "description": "",
         "image": None,
-        "author": 2,
-        "category": 2
+        "author": 1,
+        "category": 1
     }
     response = client.post('/ad/', data, content_type="application/json",
                            HTTP_AUTHORIZATION="Bearer " + access_token)

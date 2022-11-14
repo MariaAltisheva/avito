@@ -6,3 +6,4 @@ pytest_plugins = "tests.fixtures"
 
 register(CategoryFactory)
 register(UserFactory)
+register(AdFactory)

@@ -41,7 +41,7 @@ class User(AbstractUser):
                                   message="Регистрация с домена rambler запрещена")])
 
     def save(self, *args, **kwargs):
-        self.set_password(self.password)
+        # self.set_password(self.password)
         self.age = relativedelta(date.today(), self.birth_date).year
         super().save(*args, **kwargs)
 
